@@ -1,9 +1,9 @@
-##算法介绍
-###CNN图像识别
-####算法介绍
+## 算法介绍
+### CNN图像识别
+#### 算法介绍
 ![](http://upload-images.jianshu.io/upload_images/8920871-4df70ba1699211d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 使用CNN神经网络对六百多张图片进行学习，判断小车应当直走、左转、还是右转。如左图所示，白线斜率过大，小车距离白线过近，因此小车应该左转，如中间图片所示，小车应该直走，如右图所示，视野内并没有白线，此时默认小车直走。
-####CNN神经网络的基本结构
+#### CNN神经网络的基本结构
 ![](http://upload-images.jianshu.io/upload_images/8920871-8a1060796aa069b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 可以看出最左边的图像是输入层，计算机理解为输入若干个矩阵，接着是卷积层（Convolution Layer），在卷积层后面是池化层(Pooling layer)，卷积层+池化层的组合可以在隐藏层出现很多次，在若干卷积层+池化层后面是全连接层（Fully Connected Layer, 简称FC），最后是输出层。
 1. 卷积层
@@ -22,7 +22,7 @@
 dropout是指在深度学习网络的训练过程中，对于神经网络单元，按照一定的概率将其暂时从网络中丢弃。注意是暂时，对于随机梯度下降来说，由于是随机丢弃，故而每一个mini-batch都在训练不同的网络。
 ![](http://upload-images.jianshu.io/upload_images/8920871-84e202734475fffe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 dropout最重要的功能就是防止数据出现过拟合。
-####算法具体实现
+#### 算法具体实现
 1. CNN结构图
 使用keras搭建卷积神经网络
 ![](http://upload-images.jianshu.io/upload_images/8920871-7510f47e3e607f0f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
@@ -66,8 +66,8 @@ model.compile(loss='categorical_crossentropy',
 model.fit(train, y, batch_size=32, epochs=3,  
           verbose=1)
 ```
-###实时学习
-####算法介绍
+### 实时学习
+#### 算法介绍
 1. 识别出运动的像素点
 ![](http://upload-images.jianshu.io/upload_images/8920871-99f9717936f2bd72.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 通过对比相邻的两帧图像之间像素点的移动，标注出移动的像素点。得到效果图如下图所示。
