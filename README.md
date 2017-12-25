@@ -2,20 +2,25 @@
 ### CNN图像识别
 #### 算法介绍
 ![](http://upload-images.jianshu.io/upload_images/8920871-4df70ba1699211d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 使用CNN神经网络对六百多张图片进行学习，判断小车应当直走、左转、还是右转。如左图所示，白线斜率过大，小车距离白线过近，因此小车应该左转，如中间图片所示，小车应该直走，如右图所示，视野内并没有白线，此时默认小车直走。
 #### CNN神经网络的基本结构
 
 ![](http://upload-images.jianshu.io/upload_images/8920871-8a1060796aa069b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 可以看出最左边的图像是输入层，计算机理解为输入若干个矩阵，接着是卷积层（Convolution Layer），在卷积层后面是池化层(Pooling layer)，卷积层+池化层的组合可以在隐藏层出现很多次，在若干卷积层+池化层后面是全连接层（Fully Connected Layer, 简称FC），最后是输出层。
 1. 卷积层
 卷积层是CNN神经网络中最重要的一层，我们通过如下的一个例子来理解它的原理。图中的输入是一个二维的3x4的矩阵，而卷积核是一个2x2的矩阵。这里我们假设卷积是一次移动一个像素来卷积的，那么首先我们对输入的左上角2x2局部和卷积核卷积，即各个位置的元素相乘再相加，得到的输出矩阵S的S00S00的元素，值为aw+bx+ey+fzaw+bx+ey+fz。接着我们将输入的局部向右平移一个像素，现在是(b,c,f,g)四个元素构成的矩阵和卷积核来卷积，这样我们得到了输出矩阵S的S01S01的元素，同样的方法，我们可以得到输出矩阵S的S02，S10，S11，S12S02，S10，S11，S12的元素。
+
 ![](http://upload-images.jianshu.io/upload_images/8920871-f4df5aaacfbf2428.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 2. 池化层
 池化层的作用是对输入张量的各个子矩阵进行压缩。假如是2x2的池化，那么就将子矩阵的每2x2个元素变成一个元素，如果是3x3的池化，那么就将子矩阵的每3x3个元素变成一个元素，这样输入矩阵的维度就变小了。
 
 要想将输入子矩阵的每nxn个元素变成一个元素，那么需要一个池化标准。常见的池化标准有2个，MAX或者是Average。即取对应区域的最大值或者平均值作为池化后的元素值。
 
 下面这个例子采用取最大值的池化方法。同时采用的是2x2的池化。步幅为2。
+
 ![](http://upload-images.jianshu.io/upload_images/8920871-723fe51b10311831.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 首先对红色2x2区域进行池化，由于此2x2区域的最大值为6.那么对应的池化输出位置的值为6，由于步幅为2，此时移动到绿色的位置去进行池化，输出的最大值为8.同样的方法，可以得到黄色区域和蓝色区域的输出值。最终，我们的输入4x4的矩阵在池化后变成了2x2的矩阵。进行了压缩。
@@ -111,9 +116,13 @@ def draw_flow(old, new, step=4):
 kmeans 算法接受参数 k ；然后将事先输入的n个数据对象划分为 k个聚类以便使得所获得的聚类满足：同一聚类中的对象相似度较高；而不同聚类中的对象相似度较小。聚类相似度是利用各中对象的均值所获得一个“中心对象”（引力中心）来进行计算的。
 
 Kmeans算法是最为经典的基于划分的聚类方法，是十大经典数据挖掘算法之一。Kmeans算法的基本思想是：以空间中k个点为中心进行聚类，对最靠近他们的对象归类。通过迭代的方法，逐次更新各聚类中心的值，直至得到最好的聚类结果。
+
 ![](http://upload-images.jianshu.io/upload_images/8920871-8012bcd409797bcb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 我们使用Kmeans聚类分析的算法，将运动的像素点划分为三个类别，分别用矩形框将区域框出。
+
 ![](http://upload-images.jianshu.io/upload_images/8920871-86c64b93e10fb08b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 3. 特征提取
 我们使用颜色作为人的主要特征，找出上步标注出的三个矩形框中面积最大的一个，进行主颜色的提取。
 ```
@@ -153,7 +162,9 @@ def get_dominant_color(image):
 ```
 4. 实时识别
 我们根据颜色特征来识别出实时图像中人的位置。在RGB颜色空间中，以主颜色+-20作为判断的颜色区域，找出符合的像素点。通过erode和dilate来平滑像素点，得到一个区域，然后通过opencv的轮廓寻找功能找到区域轮廓的像素点，用矩形框标出这个区域。
+
 ![](http://upload-images.jianshu.io/upload_images/8920871-ec752bde2d3741dd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ```
 mask = cv2.inRange(image, lower, upper)
 mask = cv2.erode(mask, None, iterations=2)
